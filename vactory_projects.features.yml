@@ -1,0 +1,11 @@
+excluded:
+  - facets.facet_source.jsonapi_search_api_facets__default_content_index
+  - facets.facet_source.search_api__views_page__vactory_search__global
+  - jsonapi_extras.jsonapi_resource_config.node--vactory_event
+  - jsonapi_extras.jsonapi_resource_config.node--vactory_glossary
+  - jsonapi_extras.jsonapi_resource_config.node--vactory_job_ads
+  - jsonapi_extras.jsonapi_resource_config.node--vactory_news
+  - jsonapi_extras.jsonapi_resource_config.node--vactory_page
+  - jsonapi_extras.jsonapi_resource_config.node--vactory_tender
+  - symfony_mailer.mailer_policy._
+required: true

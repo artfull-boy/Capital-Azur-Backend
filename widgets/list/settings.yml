@@ -1,0 +1,25 @@
+name: 'Projects - List'
+multiple: FALSE
+category: 'Projects'
+enabled: TRUE
+fields:
+  title:
+    type: text
+    label: "Titre"
+  collection:
+    type: json_api_collection
+    label: 'JSON:API'
+    options:
+      '#required': TRUE
+      '#default_value':
+        id: "vactory_projects_list"
+        resource: node--projects
+        filters:
+          - fields[node--projects]=drupal_internal__nid,path,title,field_project_category,field_project_coordinator,field_project_deadline,field_project_name,body
+          - fields[taxonomy_term--field_project_category]=tid,name
+          - include=field_project_category
+          - page[offset]=0
+          - page[limit]=9
+          - filter[status][value]=1
+        vocabularies:
+          field_project_category: field_project_category

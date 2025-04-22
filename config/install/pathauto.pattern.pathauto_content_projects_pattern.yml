@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: pathauto_content_projects_pattern
+label: 'Pathauto Content Projects Pattern'
+type: 'canonical_entities:node'
+pattern: '/projects/[node:title]'
+selection_criteria:
+  b57e8eb2-f151-4d97-8f7a-9eab835c782e:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: b57e8eb2-f151-4d97-8f7a-9eab835c782e
+    context_mapping:
+      node: node
+    bundles:
+      projects: projects
+selection_logic: and
+weight: -5
+relationships: {  }
