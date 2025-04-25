@@ -1,6 +1,6 @@
 name: 'Three Columns'
 multiple: FALSE
-category: 'Projects'
+category: 'Projects Widgets'
 enabled: TRUE
 fields:
   title:

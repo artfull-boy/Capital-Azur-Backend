@@ -1,0 +1,33 @@
+<?php
+
+use Drupal\taxonomy\Entity\Term;
+
+/**
+ * Implements hook_install().
+ */
+function vactory_projects_install() {
+  // Define your terms.
+  $terms = [
+    'IT',
+    'Indus',
+    'Robotic',
+    'Finance',
+  ];
+
+  foreach ($terms as $term_name) {
+    // Check if the term already exists to avoid duplication.
+    $existing_terms = \Drupal::entityTypeManager()
+      ->getStorage('taxonomy_term')
+      ->loadByProperties([
+        'name' => $term_name,
+        'vid' => 'project_category',
+      ]);
+
+    if (empty($existing_terms)) {
+      Term::create([
+        'name' => $term_name,
+        'vid' => 'project_category',
+      ])->save();
+    }
+  }
+}

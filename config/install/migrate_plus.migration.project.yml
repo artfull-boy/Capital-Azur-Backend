@@ -1,0 +1,56 @@
+id: vactory_projects
+label: 'Projects'
+source:
+  plugin: csv
+  path: modules/custom/vactory_projects/artifacts/projects.csv
+  header_row_count: 1
+  delimiter: ','
+  ids: [title]
+constants:
+  dest_path: 'public://migrated-projects/'
+process:
+  nid:
+    plugin: migration_lookup
+    migration: vactory_projects
+    source: id
+  title: 'Project Name'
+  # Project Description using the body field
+  body/value: body
+  body/format:
+    plugin: default_value
+    default_value: full_html
+  # Project Category as taxonomy term reference
+  field_project_category:
+    plugin: entity_lookup
+    value_key: name
+    bundle_key: vid
+    bundle: project_category
+    entity_type: taxonomy_term
+    source: 'Project Category'
+  # Project Coordinator as user reference
+  field_project_coordinator:
+    plugin: entity_lookup
+    value_key: name
+    entity_type: user
+    source: 'Project Coordinator'
+  # Project Deadline as date field
+  field_project_deadline:
+    plugin: format_date
+    from_format: Y-m-d
+    to_format: Y-m-d
+    source: 'Project Deadline'
+  # Project Name
+  field_project_name: 'Project Name'
+  # Default language settings
+  langcode:
+    plugin: default_value
+    default_value: en
+  content_translation_source:
+    plugin: default_value
+    default_value: en
+  default_langcode:
+    plugin: default_value
+    default_value: '1'
+destination:
+  plugin: entity:node
+  default_bundle: projects

@@ -1,6 +1,6 @@
 name: 'Projects - List'
 multiple: FALSE
-category: 'Projects'
+category: 'Projects Widgets'
 enabled: TRUE
 fields:
   title:
