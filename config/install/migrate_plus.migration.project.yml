@@ -9,10 +9,6 @@ source:
 constants:
   dest_path: 'public://migrated-projects/'
 process:
-  nid:
-    plugin: migration_lookup
-    migration: vactory_projects
-    source: id
   title: 'Project Name'
   # Project Description using the body field
   body/value: body

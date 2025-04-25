@@ -5,7 +5,8 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_install().
  */
-function vactory_projects_install() {
+function vactory_projects_install()
+{
   // Define your terms.
   $terms = [
     'IT',
@@ -30,4 +31,60 @@ function vactory_projects_install() {
       ])->save();
     }
   }
+}
+
+
+/**
+ * Implements hook_uninstall().
+ */
+function vactory_projects_uninstall()
+{
+  // Delete the migration configuration entity.
+  $migration_config = \Drupal::configFactory()->getEditable('migrate_plus.migration.vactory_projects');
+  if ($migration_config) {
+    $migration_config->delete();
+  }
+
+  // Delete all project nodes created by this module.
+  $storage = \Drupal::entityTypeManager()->getStorage('node');
+  $query = $storage->getQuery()
+    ->condition('type', 'projects')
+    ->accessCheck(FALSE); // Bypass access checks to get all nodes
+
+  $nids = $query->execute();
+
+  if (!empty($nids)) {
+    $nodes = $storage->loadMultiple($nids);
+    $storage->delete($nodes);
+    \Drupal::logger('vactory_projects')->notice('@count project nodes have been deleted during module uninstallation.', ['@count' => count($nids)]);
+  }
+
+  // Clear migration status information from the database
+  try {
+    // Delete map and message tables for this migration
+    $connection = \Drupal::database();
+    $tables = [
+      'migrate_map_vactory_projects',
+      'migrate_message_vactory_projects',
+    ];
+
+    foreach ($tables as $table) {
+      if ($connection->schema()->tableExists($table)) {
+        $connection->schema()->dropTable($table);
+        \Drupal::logger('vactory_projects')->notice('Deleted migration table @table during uninstallation.', ['@table' => $table]);
+      }
+    }
+
+    // Also remove from the migrate_status table
+    if ($connection->schema()->tableExists('migrate_status')) {
+      $connection->delete('migrate_status')
+        ->condition('id', 'vactory_projects')
+        ->execute();
+    }
+  } catch (\Exception $e) {
+    \Drupal::logger('vactory_projects')->error('Error removing migration tables: @message', ['@message' => $e->getMessage()]);
+  }
+
+  // Clear the migration plugin cache to ensure the migration entity is fully removed.
+  \Drupal::service('plugin.cache_clearer')->clearCachedDefinitions();
 }
